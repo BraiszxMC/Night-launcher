@@ -175,7 +175,7 @@ els.discord.addEventListener('click', async () => {
 (async function init() {
   const info = await window.launcher.getInfo();
   els.studioLine.textContent = info.studioName;
-  els.version.textContent = `v${info.version}`;
+  els.version.textContent = `Beta ${info.version.replace('-beta','')}`;
 
   requestAnimationFrame(() => {
     requestAnimationFrame(() => {

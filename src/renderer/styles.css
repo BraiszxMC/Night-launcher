@@ -129,21 +129,6 @@ body {
   50%      { transform: translate3d(-16px, 20px, 0); opacity: 0.62; }
 }
 
-/* Un haz de luz diagonal muy tenue que cruza la escena cada 3 minutos */
-.beam {
-  position: absolute;
-  inset: -30%;
-  background: linear-gradient(
-    72deg,
-    transparent 40%,
-    rgba(140, 180, 255, 0.05) 50%,
-    transparent 60%
-  );
-  animation: beam-pass 181s linear infinite;
-}
-
-@keyframes beam-pass {
-  0%   { transform: translate3d(-28%, 0, 0); }
   100% { transform: translate3d(28%, 0, 0); }
 }
 
@@ -156,6 +141,67 @@ body {
   background-image:
     repeating-linear-gradient(0deg, rgba(255,255,255,.65) 0 1px, transparent 1px 3px),
     repeating-linear-gradient(90deg, rgba(255,255,255,.45) 0 1px, transparent 1px 3px);
+}
+
+/* Resplandor bajo, como un horizonte nocturno */
+.horizon {
+  position: absolute;
+  left: -10%; right: -10%; bottom: -22%;
+  height: 62%;
+  background: radial-gradient(60% 100% at 50% 100%,
+    rgba(58, 120, 234, 0.30) 0%,
+    rgba(20, 54, 126, 0.16) 42%,
+    transparent 74%);
+  animation: horizon-breathe 89s ease-in-out infinite;
+}
+
+@keyframes horizon-breathe {
+  0%, 100% { opacity: 0.75; transform: translate3d(0, 0, 0) scale(1); }
+  50%      { opacity: 1;    transform: translate3d(0, -10px, 0) scale(1.04); }
+}
+
+/* Puntos de luz lejanos. Dos capas a distinta velocidad: da profundidad. */
+.stars {
+  position: absolute;
+  inset: -5%;
+  background-image:
+    radial-gradient(1.4px 1.4px at 12% 22%, rgba(214, 230, 255, 0.75), transparent),
+    radial-gradient(1.2px 1.2px at 78% 14%, rgba(190, 214, 255, 0.6), transparent),
+    radial-gradient(1.6px 1.6px at 34% 68%, rgba(214, 230, 255, 0.5), transparent),
+    radial-gradient(1.1px 1.1px at 62% 44%, rgba(190, 214, 255, 0.55), transparent),
+    radial-gradient(1.3px 1.3px at 88% 72%, rgba(214, 230, 255, 0.45), transparent),
+    radial-gradient(1.2px 1.2px at 22% 88%, rgba(190, 214, 255, 0.5), transparent),
+    radial-gradient(1.5px 1.5px at 52% 8%, rgba(214, 230, 255, 0.4), transparent),
+    radial-gradient(1.1px 1.1px at 6% 56%, rgba(190, 214, 255, 0.45), transparent);
+  animation: stars-twinkle 23s ease-in-out infinite;
+}
+
+@keyframes stars-twinkle {
+  0%, 100% { opacity: 0.55; }
+  50%      { opacity: 0.9; }
+}
+
+/* Cinta de aurora que ondula muy despacio sobre todo lo demas */
+.aurora {
+  position: absolute;
+  left: -20%; right: -20%;
+  top: 6%;
+  height: 220px;
+  background: linear-gradient(178deg,
+    transparent 0%,
+    rgba(88, 150, 255, 0.14) 38%,
+    rgba(140, 190, 255, 0.20) 50%,
+    rgba(70, 120, 220, 0.10) 62%,
+    transparent 100%);
+  filter: blur(38px);
+  transform-origin: 50% 50%;
+  animation: aurora-wave 121s ease-in-out infinite;
+}
+
+@keyframes aurora-wave {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(-2.5deg) scaleY(1); opacity: 0.75; }
+  33%      { transform: translate3d(24px, 26px, 0) rotate(1.5deg) scaleY(1.25); opacity: 1; }
+  66%      { transform: translate3d(-18px, 12px, 0) rotate(-1deg) scaleY(0.9); opacity: 0.85; }
 }
 
 .vignette {
@@ -244,7 +290,9 @@ body:hover .titlebar-name { color: var(--slate-400); }
 
 .card {
   position: relative;
-  width: 384px;
+  display: grid;
+  grid-template-columns: 208px 1fr;
+  width: 640px;
   padding: 1px;
   border-radius: var(--radius-card);
   overflow: hidden;
@@ -315,11 +363,64 @@ body[data-phase="ready"] .card {
 }
 body[data-phase="ready"] .card-specular { opacity: 1; }
 
-.card-body {
+/* Columna izquierda: quien eres. Derecha: que haces. */
+.pane {
   position: relative;
-  padding: 36px 34px 28px;
-  border-radius: inherit;
-  text-align: center;
+  padding: 34px 30px 30px;
+}
+
+.pane-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  background: linear-gradient(168deg, rgba(11, 26, 61, 0.5), rgba(5, 8, 15, 0.28));
+  border-right: 1px solid rgba(150, 190, 255, 0.13);
+  border-radius: var(--radius-card) 0 0 var(--radius-card);
+}
+
+.pane-action {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 34px 34px 30px;
+  text-align: left;
+}
+
+.pane-rule {
+  display: block;
+  width: 34px;
+  height: 2px;
+  margin: 18px 0 0;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--lapis-300), transparent);
+}
+
+.build {
+  margin: auto 0 0;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--slate-500);
+}
+
+.eyebrow {
+  margin: 0 0 9px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--lapis-300);
+  opacity: 0.85;
+}
+
+.headline {
+  margin: 0;
+  font-size: 21px;
+  font-weight: 640;
+  line-height: 1.2;
+  letter-spacing: -0.018em;
+  color: var(--slate-50);
 }
 
 /* Linea de progreso en el canto inferior, solo durante la espera */
@@ -370,9 +471,9 @@ body[data-phase="ready"] [data-reveal="7"] { transition-delay: 500ms; }
 /* ============================= MARCA ============================= */
 
 .mark {
-  width: 62px;
-  height: 62px;
-  margin: 0 auto 16px;
+  width: 54px;
+  height: 54px;
+  margin: 0 0 18px;
   perspective: 420px;
 }
 
@@ -434,7 +535,7 @@ body[data-phase="ready"] [data-reveal="7"] { transition-delay: 500ms; }
 
 .title {
   margin: 0;
-  font-size: 24px;
+  font-size: 27px;
   font-weight: 640;
   line-height: 1.12;
   letter-spacing: -0.021em;
@@ -442,10 +543,11 @@ body[data-phase="ready"] [data-reveal="7"] { transition-delay: 500ms; }
 }
 
 .sub {
-  margin: 5px 0 0;
-  font-size: 10.5px;
+  margin: 8px 0 0;
+  font-size: 10px;
   font-weight: 600;
-  letter-spacing: 0.24em;
+  line-height: 1.6;
+  letter-spacing: 0.17em;
   text-transform: uppercase;
   color: var(--slate-500);
 }
@@ -702,7 +804,8 @@ body[data-signed-in="true"] .account-check {
    se desplaza. El fondo deja de derivar del todo. */
 
 @media (prefers-reduced-motion: reduce) {
-  .field, .beam, .mark-cube, .mark-sweep, .card-progress {
+  .field, .beam, .mark-cube, .mark-sweep, .card-progress,
+  .aurora, .horizon, .stars {
     animation: none !important;
   }
   .card,
