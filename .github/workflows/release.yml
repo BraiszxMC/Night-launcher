@@ -1,0 +1,44 @@
+name: Release
+
+# Publica una release con los instaladores. Se dispara al empujar un tag v*:
+#
+#   git tag v0.2.0-beta
+#   git push origin v0.2.0-beta
+#
+# Los ficheros de la release son el link de descarga permanente.
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build:
+    uses: ./.github/workflows/build.yml
+
+  release:
+    name: Publicar release
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          merge-multiple: true
+
+      - name: Crear la release con los instaladores
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Night Launcher ${{ github.ref_name }}
+          body: |
+            Build automatica del launcher del estudio.
+
+            - **Windows**: descarga el `.exe` y ejecutalo.
+            - **Linux**: descarga el `.AppImage`, dale permisos de ejecucion (`chmod +x`) y abrelo.
+
+            Version beta: de momento solo el menu de inicio de sesion con Discord.
+          files: artifacts/**/*
+          fail_on_unmatched_files: true

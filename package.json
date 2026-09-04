@@ -1,0 +1,41 @@
+{
+  "name": "night-launcher",
+  "productName": "Night Launcher",
+  "version": "0.2.0-beta",
+  "description": "Launcher de Minecraft (beta) para el estudio de eventos",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "dist": "electron-builder"
+  },
+  "author": "BraiszxMC",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^32.2.0",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "com.nightlauncher.app",
+    "productName": "Night Launcher",
+    "files": [
+      "src/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": "nsis"
+    },
+    "linux": {
+      "target": "AppImage",
+      "category": "Game"
+    },
+    "mac": {
+      "target": "dmg"
+    },
+    "publish": null
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BraiszxMC/Night-launcher.git"
+  }
+}
